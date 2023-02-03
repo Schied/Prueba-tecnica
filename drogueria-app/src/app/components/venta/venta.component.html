@@ -1,0 +1,40 @@
+<div>
+  <p-toast></p-toast>
+  <br>
+  <h3>Filtro de ventas</h3>
+  <div style="display: flex;">
+    <div style="display: block; margin-right: 1rem;">
+      <label for="float-input">Fecha inicio </label>
+      <input id="fecha_fabricacion" type="date" name="fecha_fabricacion" [(ngModel)]="filtro.Dateini" (change)="cambioFecha()" max="{{today | date:'yyyy-MM-dd'}}" pInputText>
+    </div>
+    <br>
+    <div style="margin-right: 10px;">
+      <label for="fecha_vencimiento">Fecha fin </label>
+      <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" [(ngModel)]="filtro.Datefin" min="{{filtro.Dateini | date:'yyyy-MM-dd'}}" max="{{today | date:'yyyy-MM-dd'}}" pInputText>
+    </div>
+    <div style="margin-right: 10px;">
+      <button pButton type="button" label="Filtrar" class="p-button-primary" (click)="filtrarVentas()"></button>
+    </div>
+    <div>
+      <p-button label="" icon="pi pi-refresh" iconPos="left" (click)="resetVentas()"></p-button>
+    </div>
+  </div>
+  <br>
+  <br>
+  <p-table [value]="ventas" [columns]="cols" [paginator]="true" [rows]="3" >
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" scope="col">{{col.header}}</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-medicamento let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns" >
+              <span *ngIf="col.fields === 'fecha_fabricacion' || col.fields === 'fecha_vencimiento'; then thenTemplateName else elseTemplateName"></span>
+              <ng-template #thenTemplateName>{{ medicamento[col.fields] | date: 'dd/MM/yyyy'}}</ng-template>
+              <ng-template #elseTemplateName>{{ medicamento[col.fields]}}</ng-template>
+            </td>
+        </tr>
+    </ng-template>
+  </p-table>
+</div>

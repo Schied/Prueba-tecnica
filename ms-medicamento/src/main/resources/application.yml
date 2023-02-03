@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: ms-medicamento
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/medicamento-db
+    username: root
+    password:
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+ 
+#Tomcat Embedded Server Configuration
+server: 
+  port: 8001
+ 
+#Eureka Configuration Properties  
+eureka: 
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

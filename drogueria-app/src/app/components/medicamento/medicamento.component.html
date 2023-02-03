@@ -1,0 +1,116 @@
+<div>
+  <p-toast></p-toast>
+  <br>
+  <button pButton type="button" label="Registrar nuevo" class="p-button-primary" (click)="showModalMed()"></button>
+  <br>
+  <br>
+  <p-table [value]="medicamentos" [columns]="cols" [paginator]="true" [rows]="3" >
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" scope="col">{{col.header}}</th>
+            <th scope="col">Opciones</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-medicamento let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns" >
+              <span *ngIf="col.fields === 'fecha_fabricacion' || col.fields === 'fecha_vencimiento'; then thenTemplateName else elseTemplateName"></span>
+              <ng-template #thenTemplateName>{{ medicamento[col.fields] | date: 'dd/MM/yyyy'}}</ng-template>
+              <ng-template #elseTemplateName>{{ medicamento[col.fields]}}</ng-template>
+            </td>
+            <td>
+              <button pButton type="button" label="Vender" class="p-button-primary" (click)="venderMedicamento(medicamento.id)" style="margin-right: 10px;"></button>
+              <button pButton type="button" label="Editar" class="p-button-warning" (click)="editarMedicamento(medicamento.id)" style="margin-right: 10px;"></button>
+              <button pButton type="button" label="Eliminar" class="p-button-danger" (click)="eliminarMedicamento(medicamento.id)"></button>
+            </td>
+        </tr>
+    </ng-template>
+  </p-table>
+  <!--MODAL REGISTRO-->
+  <p-dialog header="Registrar nuevo" [responsive]="true" [style]="{width: '550px'}" [(visible)]="modalMed" [modal]="true" styleClass="p-fluid">
+    <form [formGroup]="frmMedicamento" class="login-container" (submit)="RegistrarMed()">
+      <div>
+        <label for="float-input">Nombre</label>
+        <input id="nombre" type="text" name="nombre" formControlName="nombre" pInputText>
+      </div>
+      <br>
+      <div>
+        <label for="float-input">Laboratorio</label>
+        <input id="laboratorio" type="text" name="laboratorio" formControlName="laboratorio" pInputText>
+      </div>
+      <br>
+      <div>
+        <label for="float-input">Fecha de fabricación</label>
+        <input id="fecha_fabricacion" type="date" name="fecha_fabricacion" formControlName="fecha_fabricacion" pInputText>
+      </div>
+      <br>
+      <div>
+        <label for="fecha_vencimiento">Fecha de vencimiento</label>
+        <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" formControlName="fecha_vencimiento" pInputText>
+      </div>
+      <br>
+      <div>
+        <label for="stock">Stock</label>
+        <input id="stock" type="number" name="stock" formControlName="stock" pInputText>
+      </div>
+      <br>
+      <div>
+        <label for="valor">Valor unitario</label>
+        <input id="valor" type="number" name="valor" formControlName="valor" pInputText>
+      </div>
+    </form>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [disabled]="frmMedicamento.invalid" (click)="RegistrarMed()"></button>
+    </ng-template>
+  </p-dialog>
+  <!--MODAL MODIFICAR-->
+  <p-dialog header="Modificar medicamento" [responsive]="true" [style]="{width: '550px'}" [(visible)]="modalMMed" [modal]="true" styleClass="p-fluid">
+    <form [formGroup]="frmMMedicamento" class="login-container" (submit)="ModificarMed()">
+      <div>
+        <label for="float-input">Nombre</label>
+        <input id="nombre" type="text" name="nombre" formControlName="nombre" pInputText>
+      </div>
+      <br>
+      <div>
+        <label for="float-input">Laboratorio</label>
+        <input id="laboratorio" type="text" name="laboratorio" formControlName="laboratorio" pInputText>
+      </div>
+      <br>
+      <div>
+        <label for="float-input">Fecha de fabricación</label>
+        <input id="fecha_fabricacion" type="date" name="fecha_fabricacion" formControlName="fecha_fabricacion" pInputText>
+      </div>
+      <br>
+      <div>
+        <label for="fecha_vencimiento">Fecha de vencimiento</label>
+        <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" formControlName="fecha_vencimiento" pInputText>
+      </div>
+      <br>
+      <div>
+        <label for="stock">Stock</label>
+        <input id="stock" type="number" name="stock" formControlName="stock" pInputText>
+      </div>
+      <br>
+      <div>
+        <label for="valor">Valor unitario</label>
+        <input id="valor" type="number" name="valor" formControlName="valor" pInputText>
+      </div>
+    </form>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [disabled]="frmMMedicamento.invalid" (click)="ModificarMed()"></button>
+    </ng-template>
+  </p-dialog>
+  <!--MODAL VENTA-->
+  <p-dialog header="Realizar venta" [responsive]="true" [style]="{width: '550px'}" [(visible)]="modalVenta" [modal]="true" styleClass="p-fluid">
+    <p-messages [(value)]="msgs"></p-messages>
+    <div>
+      <label for="cantidad">Cantidad</label>
+      <input id="cantidad" type="number" name="cantidad" [(ngModel)]="venta.cantidad" pInputText>
+    </div>
+    <p>Total a pagar: {{precio * venta.cantidad}}</p>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="VenderMed()"></button>
+    </ng-template>
+  </p-dialog>
+
+</div>
